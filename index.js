@@ -23,3 +23,5 @@ app.get('/latest/', function(req, res){
     
     res.status(200).send(result)
 })
+
+.listen(process.env.PORT || 8080)
