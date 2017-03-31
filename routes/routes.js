@@ -1,5 +1,6 @@
 var router  = require('express').Router()
 var request = require('request')
+var url     = require('url')
 
 var options = {
     url: 'https://api.cognitive.microsoft.com/bing/v5.0/images/search?q=cats&count=10&offset=0',
@@ -20,15 +21,15 @@ router.get('/', function(req, res){
             
             var element = {}
             
-            element.url = val.contentUrl
+            element.url = url.parse(val.contentUrl, true).query.r
             element.snippet = val.name
             element.thumbnail = val.thumbnailUrl
             element.context = val.hostPageDisplayUrl
             
             result.push(element)
         })
-        res.status(200).send(result)
         req.database.close()
+        res.status(200).send(result)
     })
 })
 
