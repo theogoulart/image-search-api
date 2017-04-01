@@ -3,14 +3,16 @@ var request = require('request')
 var url     = require('url')
 
 var options = {
-    url: 'https://api.cognitive.microsoft.com/bing/v5.0/images/search?q=cats&count=10&offset=0',
     headers: {
         'Ocp-Apim-Subscription-key': process.env.IMAGEAPI_KEY
     },
     json: true
 }
 
-router.get('/', function(req, res){
+router.get('/imagesearch/:query', function(req, res){
+    
+    options.url = 'https://api.cognitive.microsoft.com/bing/v5.0/images/search?q='+
+                    req.params.query+'&count=10&offset='+((req.query.offset)?req.query.offset:'0');
     
     request.get(options,function(err, response, body){
         if (err) throw err
