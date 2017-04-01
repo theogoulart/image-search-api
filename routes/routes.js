@@ -1,4 +1,5 @@
 var router  = require('express').Router()
+var mongo   = require('mongodb').MongoClient
 var request = require('request')
 var url     = require('url')
 
@@ -30,7 +31,15 @@ router.get('/imagesearch/:query', function(req, res){
             
             result.push(element)
         })
-        req.database.close()
+        
+        req.database.collection('queries').insert({
+            term: req.params.query,
+            when: new Date().toISOString()
+        }, function(err, doc){
+            if(err) throw err
+            req.database.close()
+        })
+        
         res.status(200).send(result)
     })
 })
