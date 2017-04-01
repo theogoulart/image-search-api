@@ -46,13 +46,11 @@ router.get('/imagesearch/:query', function(req, res){
 
 router.get('/latest/', function(req, res){
     
-    var result = {}
-    
-    result.term = ""
-    result.when = ""
-    
-    req.database.close()
-    res.status(200).send(result)
+    req.database.collection('queries').find({},{_id: 0}).sort({when: -1}).limit(10).toArray(function(err, result){
+        if(err) throw err
+        
+        res.status(200).send(result)
+    })
 })
 
 module.exports = router
